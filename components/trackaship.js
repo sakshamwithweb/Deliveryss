@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MoreInfoTrack from "./moreInfoTrack";
 import Trackaship1 from "./trackaship1";
-import { ToastContainer,Bounce, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const TrackAShip = (props) => {

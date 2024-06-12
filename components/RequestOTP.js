@@ -6,10 +6,10 @@ import {
   Button,
   Typography,
   Box,
-  Alert,
+  
   CircularProgress,
 } from "@mui/material";
-import { ToastContainer,Bounce, toast } from "react-toastify";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const OTPForm = ({ Email, onOtpVerified }) => {

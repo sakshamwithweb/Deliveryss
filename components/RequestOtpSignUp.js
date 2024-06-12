@@ -9,7 +9,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { ToastContainer,Bounce, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const RequestOtpSignUp = ({ setFormSuccess, Email }) => {

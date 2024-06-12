@@ -7,7 +7,7 @@ import MyImage4 from "@/components/img4";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import RequestOtpSignUp from "@/components/RequestOtpSignUp";
-import { ToastContainer, toast, Bounce } from "react-toastify";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {

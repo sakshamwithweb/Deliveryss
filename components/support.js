@@ -1,8 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { toast, ToastContainer, Bounce } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import Thanks_support from "./thanks_support";
-import SystemError from "./systemError";
+import { toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const Support = () => {
   const [email, setEmail] = useState("");
