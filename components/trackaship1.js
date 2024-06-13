@@ -40,6 +40,11 @@ const Trackaship1 = ({
   ] = useState(false);
 
   const [
+    suggestPickupPinCodeInternational,
+    setSuggestPickupPinCodeInternational,
+  ] = useState([]);
+
+  const [
     selectedSuggestPickupPinCodeDomestic,
     setSelectedSuggestPickupPinCodeDomestic,
   ] = useState(null);
@@ -93,6 +98,11 @@ const Trackaship1 = ({
   const [writeablePickupDomestic, setWriteablePickupDomestic] = useState(true);
   const [writeableDeliverDomestic, setWriteableDeliverDomestic] =
     useState(true);
+
+  const [
+    suggestPickupPinCodeInternationalArea,
+    setSuggestPickupPinCodeInternationalArea,
+  ] = useState(false);
 
   const handleSuggestDeliverPinCodeDomesticSuggestion = async (item) => {
     setDeliverCodeDomestic(item.city);
@@ -246,11 +256,47 @@ const Trackaship1 = ({
 
   useEffect(() => {
     if (pickupPinCodeInternational.length >= 5) {
-      (async()=>{
-        const response = fetch
+      (async () => {
+        try {
+          const response = await fetch("/api/pincodeToAddressDomesticVerify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ pincode: pickupPinCodeInternational }),
+          });
+          const data = await response.json();
+          if (data.success) {
+            if (data.result.length != 0) {
+              //work here
+              console.log(data.result)
+              setSuggestPickupPinCodeInternational(data.result[pickupPinCodeInternational])
+            } else {
+              setSuggestPickupPinCodeInternational([])
+              toast.error("Not found..");
+            }
+          } else {
+            setSuggestPickupPinCodeInternational([])
+            toast.error("Not found..");
+          }
+        } catch (error) {
+          setSuggestPickupPinCodeInternational([])
+          console.error("Error:", error);
+        }
       })();
+    }else{
+      setSuggestPickupPinCodeInternational([])
     }
   }, [pickupPinCodeInternational]);
+
+  useEffect(() => {
+    if (suggestPickupPinCodeInternational.length !== 0) {
+      setSuggestPickupPinCodeInternationalArea(true);
+      console.log(suggestPickupPinCodeInternational);
+    }else{
+      setSuggestPickupPinCodeInternationalArea()
+    }
+  }, [suggestPickupPinCodeInternational]);
 
   return (
     <>
@@ -620,63 +666,75 @@ const Trackaship1 = ({
                     </div>
                   ) : (
                     <div className="mt-[19px] flex flex-col content-center items-center mr-4">
-                      <div className="w-[30vw] h-[5vh] ">
-                        <input
-                          type="tel"
-                          name="pickupPinCodeInternational"
-                          value={pickupPinCodeInternational}
-                          onChange={(e) =>
-                            setPickupPinCodeInternational(e.target.value)
-                          }
-                          maxLength="10"
-                          className="border border-black w-[100%] h-[100%] rounded-lg"
-                          placeholder="Enter Pickup Pin Code"
-                        />
-                      </div>
-                      <div className="w-[30vw] mt-3 h-[5vh] ">
-                        <label
-                          htmlFor="country"
-                          className="mr-4"
-                          style={{
-                            userSelect: "none",
-                            MozUserSelect: "none",
-                            WebkitUserSelect: "none",
-                            msUserSelect: "none",
-                          }}
-                        >
-                          Select Country
-                        </label>
-                        <select
-                          onChange={(e) => setCountry(e.target.value)}
-                          value={country}
-                          name="country"
-                          className="border border-black w-[37%] h-[100%] rounded-lg"
-                        >
-                          {countryData.length > 0 &&
-                            countryData.map((item, index) => (
-                              <option key={index} value={item.name}>
-                                {item.name}
-                              </option>
-                            ))}
-                        </select>
-                      </div>
-                      <div>
-                        <button
-                          className="mt-3 border border-black rounded-full p-1"
-                          onClick={(e) => {
-                            handleButtonClickInternational(e);
-                          }}
-                          style={{
-                            userSelect: "none",
-                            MozUserSelect: "none",
-                            WebkitUserSelect: "none",
-                            msUserSelect: "none",
-                          }}
-                        >
-                          Get Otp and Ship
-                        </button>
-                      </div>
-                    </div>
+  <div className="w-[30vw] h-[5vh] relative"> {/* Added relative positioning */}
+    <input
+      type="tel"
+      name="pickupPinCodeInternational"
+      value={pickupPinCodeInternational}
+      onChange={(e) =>
+        setPickupPinCodeInternational(e.target.value)
+      }
+      maxLength="10"
+      className="border border-black w-[100%] h-[100%] rounded-lg"
+      placeholder="Enter Pickup Pin Code"
+    />
+    {suggestPickupPinCodeInternationalArea && (
+      <div className={`rounded-2xl bg-white max-h-40 ${suggestPickupPinCodeInternational.length!==0 && "border border-black"} overflow-y-auto absolute top-full left-0 w-full z-10 custom-scrollbar`}>
+        {suggestPickupPinCodeInternational.map((item, index) => (
+          <div onClick={()=>{console.log(item)}} key={index}>
+            {item.city}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+  <div className="bg-slate-100 vh] text-gray-500 text-sm"> 
+  </div>
+  <div className="w-[30vw] mt-3 h-[5vh] ">
+    <label
+      htmlFor="country"
+      className="mr-4"
+      style={{
+        userSelect: "none",
+        MozUserSelect: "none",
+        WebkitUserSelect: "none",
+        msUserSelect: "none",
+      }}
+    >
+      Select Country
+    </label>
+    <select
+      onChange={(e) => setCountry(e.target.value)}
+      value={country}
+      name="country"
+      className="border border-black w-[37%] h-[100%] rounded-lg"
+    >
+      {countryData.length > 0 &&
+        countryData.map((item, index) => (
+          <option key={index} value={item.name}>
+            {item.name}
+          </option>
+        ))}
+    </select>
+  </div>
+  <div>
+    <button
+      className="mt-3 border border-black rounded-full p-1"
+      onClick={(e) => {
+        handleButtonClickInternational(e);
+      }}
+      style={{
+        userSelect: "none",
+        MozUserSelect: "none",
+        WebkitUserSelect: "none",
+        msUserSelect: "none",
+      }}
+    >
+      Get Otp and Ship
+    </button>
+  </div>
+</div>
+
                   )}
                 </div>
               )}
