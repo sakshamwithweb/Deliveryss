@@ -6,9 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Trackaship1 = ({
   userEmail,
-  country,
   countryData,
-  setCountry,
   pickupPinCodeInternational,
   setPickupPinCodeInternational,
   setDeliverCodeDomestic,
@@ -38,6 +36,8 @@ const Trackaship1 = ({
     suggestPickupPinCodeDomesticArea,
     setSuggestPickupPinCodeDomesticArea,
   ] = useState(false);
+
+  const [country, setCountry] = useState("");
 
   const [
     suggestPickupPinCodeInternational,
@@ -306,52 +306,42 @@ const Trackaship1 = ({
     }
   };
 
-  ///////////////////////////////////////////////////
-  ///////////////////////////////////////////////////
-  ///////////////////////////////////////////////////
-  ///////////////////////////////////////////////////
-  ///////////////////////////////////////////////////
-  ///////////////////////////////////////////////////
-  ///////////////////////////////////////////////////
-
+  //send in pricetellbydistance to international
+  //see after handleButtonClickInternational
   useEffect(() => {
+    //when we fetched the latitude and longitude of deliver country for international so we set the value.
     if (
       selectedSuggestDeliverLatitudeInternational !== null &&
       selectedSuggestDeliverLongitudeInternational !== null &&
       selectedSuggestPickupLongitudeInternational !== null &&
       selectedSuggestPickupLatitudeInternational !== null
     ) {
-      console.log(
-        'selectedSuggestDeliverLatitudeInternational:',
-        selectedSuggestDeliverLatitudeInternational,
-        'selectedSuggestDeliverLongitudeInternational:',
-        selectedSuggestDeliverLongitudeInternational,
-        'selectedSuggestPickupLongitudeInternational:',
-        selectedSuggestPickupLongitudeInternational,
-        'selectedSuggestPickupLatitudeInternational:',
-        selectedSuggestPickupLatitudeInternational
-      );
+      //when we know all so now show that user is appliable(Don't worry i have checked a condition in api to not get null value in longitude and latitude)
+      toast.success("Congratulation! You are applicable...");
+      //turn the international ship to pricetellbydistance component
+      setSendPriceTellBydistance(true);
     }
-    
   }, [
     selectedSuggestDeliverLatitudeInternational,
     selectedSuggestDeliverLongitudeInternational,
     selectedSuggestPickupLongitudeInternational,
     selectedSuggestPickupLatitudeInternational,
   ]);
-  
 
-
-
+  //work when international ship btn is clicked
   const handleButtonClickInternational = async (e) => {
+    //to prevent from loading
     e.preventDefault();
+    //when all thing is set and btn is clicked condition
     if (
       country.length !== 0 &&
       country.toLowerCase() != "select country" &&
       !writeablePickupInternational
     ) {
+      //looking for user's email. If exist even now so give to verifyCountryUser so as to it will check whether country of user and pickup country is same or not from here-
       if (userEmail) {
         try {
+          // giving to verifyCountryUser
           const response = await fetch("/api/verifyCountryUser", {
             method: "POST",
             headers: {
@@ -362,34 +352,37 @@ const Trackaship1 = ({
               email: userEmail,
             }),
           });
+          //get the response
           const responseData = await response.json();
+          // if response has data nad success is true
           if (responseData) {
             if (responseData.success) {
-              toast.success("Congratulation! You are applicable...");
-           
+              //now user country is same as pickup country
+              //So check deiver country distance for that we need longitude and latitude so do by countryName we got from upper.
               const response2 = await fetch("/api/countryWithCapitalPinCode", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  pickupLongitude: selectedSuggestPickupLongitudeInternational,
-                  pickupLatitude: selectedSuggestPickupLatitudeInternational,
                   deliverCountry: country,
                 }),
               });
               const response2Data = await response2.json();
               if (response2Data.success) {
+                //setting the value of deliver country's latitude and longitude
                 setSelectedSuggestDeliverLatitudeInternational(
                   response2Data.data.latitude
                 );
                 setSelectedSuggestDeliverLongitudeInternational(
                   response2Data.data.longitude
                 );
+
+                //now see useefect where deliver longitude is called,,
+                //if error comes-
               } else {
-                console.log("errorrrrrrrrrrr");
+                toast.error("Sorry you are not applicable");
               }
-              //do here
             } else {
               toast.error("Write your country's pin code in pickup...");
             }
@@ -399,49 +392,68 @@ const Trackaship1 = ({
         } catch (error) {
           toast.error("Something went wrong! Reload the page");
         }
-      }
+      } //- till here
     } else {
+      //if all are not set after clicking the btn
       toast.error("All fields are compulsory");
     }
   };
 
+  //check to add suggestions in international ship pickup input
   useEffect(() => {
+    // when user has written 5 digit or more pin code in input 
     if (pickupPinCodeInternational.length >= 5) {
+      // Use IIFE concept to direct call function
+      //This function will fetch the array of same pin code
       (async () => {
         try {
+          //try to fetch
           const response = await fetch("/api/pincodeToAddressDomesticVerify", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
+            //give pincode
             body: JSON.stringify({ pincode: pickupPinCodeInternational }),
           });
           const data = await response.json();
+          //if no server error is there and it is suceed
           if (data.success) {
+            // when atleast single data is as user input
             if (data.result.length != 0) {
-              //work here
+              // setting the array in setSuggestPickupPinCodeInternational.
               setSuggestPickupPinCodeInternational(
                 data.result[pickupPinCodeInternational]
               );
+              // else if 0 data pincode is as user input
             } else {
+              toast.error("No place found..")
               setSuggestPickupPinCodeInternational([]);
             }
+            // when error is there any
           } else {
+            toast.error("Something is wrong!")
             setSuggestPickupPinCodeInternational([]);
           }
+          // if error comes during following try.
         } catch (error) {
+          toast.error("Something is wrong!")
           setSuggestPickupPinCodeInternational([]);
         }
       })();
+      //if user type less than 5 so don't suggest anything
     } else {
       setSuggestPickupPinCodeInternational([]);
     }
   }, [pickupPinCodeInternational]);
 
+  //when suggestions is there for international ship pickup.
   useEffect(() => {
+    //if array has some data so show suggestions
     if (suggestPickupPinCodeInternational.length !== 0) {
       setSuggestPickupPinCodeInternationalArea(true);
     } else {
+      //when array is blank so hide the suggestions
       setSuggestPickupPinCodeInternationalArea();
     }
   }, [suggestPickupPinCodeInternational]);

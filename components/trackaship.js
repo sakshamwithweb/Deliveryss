@@ -14,7 +14,7 @@ const TrackAShip = (props) => {
   const [pickupPinCodeInternational, setPickupPinCodeInternational] =
     useState("");
   const [deliverCodeDomestic, setDeliverCodeDomestic] = useState("");
-  const [country, setCountry] = useState("");
+  
   const [error, setError] = useState(false);
   const isMobileValid = mobileNo.length === 10;
   const isOrderIdValid = orderId.length === 9;
@@ -174,8 +174,6 @@ const TrackAShip = (props) => {
           setDeliverCodeDomestic={setDeliverCodeDomestic}
           pickupPinCodeInternational={pickupPinCodeInternational}
           setPickupPinCodeInternational={setPickupPinCodeInternational}
-          country={country}
-          setCountry={setCountry}
           countryData={countryData}
           userEmail={userEmail}
         />

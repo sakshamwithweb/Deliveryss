@@ -156,25 +156,27 @@ export async function POST(request) {
           if (filteredResult.length > 0) {
             const firstLocation = filteredResult[0]; // Get the first location
             const { latitude, longitude } = firstLocation;
-            return NextResponse.json({
-              success: true,
-              data: { latitude, longitude },
-            });
+            if (latitude != null && longitude != null) {
+              return NextResponse.json({
+                success: true,
+                data: { latitude, longitude },
+              });
+            }
           } else {
             console.log("No result found");
-            return NextResponse.json({ success: false, data: {} }); // or handle no result case
+            return NextResponse.json({ success: false, data: {} });
           }
         } else {
           console.log("No result found");
           return NextResponse.json({ success: false, data: {} }); // or handle no result case
         }
       } else {
-        console.error(`Failed to fetch with status ${response.status}`);
-        return NextResponse.json({ success: false, error: "Failed to fetch" });
+        console.log("No result found");
+        return NextResponse.json({ success: false, data: {} }); // or handle no result case
       }
     } else {
-      console.error(`Country data not found for ${deliverCountry}`);
-      return NextResponse.json({ success: false, error: "Country not found" });
+      console.error(`Failed to fetch with status ${response.status}`);
+      return NextResponse.json({ success: false, error: "Failed to fetch" });
     }
   } catch (error) {
     console.error("Error processing request:", error);
