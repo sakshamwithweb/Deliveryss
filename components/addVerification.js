@@ -42,8 +42,6 @@ const AddVerification = ({
     } catch (error) {
       toast.error("Something went wrong. Try again..")
     }
-
-    console.log({ Document: selectedIdProof, Id: input });
   };
 
   return (

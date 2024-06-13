@@ -126,7 +126,6 @@ const TrackAShip = (props) => {
       body: JSON.stringify({ orderId: orderId }),
     });
     const datas = await response.json();
-    console.log(datas.data)
     if (datas.data == undefined || datas.data == null || datas.length == 0) {
       toast.error("We are unable to find. Recheck");
       console.log("We are unable to find. Recheck");

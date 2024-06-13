@@ -136,8 +136,6 @@ export default function Login() {
             router.push("/");
             toast.success("Signup successful!");
           }
-        } else {
-          console.log({ email, password, country, name, states });
         }
       } catch (error) {
         console.log("error is:", error);

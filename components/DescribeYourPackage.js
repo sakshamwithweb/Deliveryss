@@ -7,11 +7,7 @@ const DescribeYourPackage = ({ handleNextCard }) => {
   const [otherInput, setOtherInput] = useState("");
   const [showOtherInput, setShowOtherInput] = useState(false);
 
-  useEffect(() => {
-    if (selectedLabel.length !== 0) {
-      console.log(selectedLabel);
-    }
-  }, [selectedLabel]);
+ 
 
   const items = [
     {

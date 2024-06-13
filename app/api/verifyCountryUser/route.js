@@ -30,7 +30,7 @@ export async function POST(request) {
       return NextResponse.json({
         success: false,
         message: "Failed to get ISO2 code",
-        country: { country, answer },
+        country: country,
         answer: answer.iso2,
       });
     }

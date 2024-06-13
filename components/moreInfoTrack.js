@@ -10,7 +10,6 @@ const MoreInfoTrack = ({
   phoneNumberDeliveryBoy,
   orderDetails,
 }) => {
-  console.log(percent, title, phoneNumberDeliveryBoy);
 
   const truncateTitle = (title) => {
     if (!title) return "";

@@ -104,6 +104,43 @@ const Trackaship1 = ({
     setSuggestPickupPinCodeInternationalArea,
   ] = useState(false);
 
+  const [
+    selectedSuggestPickupPinCodeInternational,
+    setSelectedSuggestPickupPinCodeInternational,
+  ] = useState(null);
+  const [
+    selectedSuggestPickupStateInternational,
+    setSelectedSuggestPickupStateInternational,
+  ] = useState(null);
+  const [
+    selectedSuggestPickupCityInternational,
+    setSelectedSuggestPickupCityInternational,
+  ] = useState(null);
+  const [
+    selectedSuggestPickupLatitudeInternational,
+    setSelectedSuggestPickupLatitudeInternational,
+  ] = useState(null);
+  const [
+    selectedSuggestPickupLongitudeInternational,
+    setSelectedSuggestPickupLongitudeInternational,
+  ] = useState(null);
+
+  const [
+    selectedSuggestDeliverLatitudeInternational,
+    setSelectedSuggestDeliverLatitudeInternational,
+  ] = useState(null);
+  const [
+    selectedSuggestDeliverLongitudeInternational,
+    setSelectedSuggestDeliverLongitudeInternational,
+  ] = useState(null);
+  const [
+    selectedSuggestPickupCountryCodeInternational,
+    setSelectedSuggestPickupCountryCodeInternational,
+  ] = useState(null);
+
+  const [writeablePickupInternational, setWriteablePickupInternational] =
+    useState(true);
+
   const handleSuggestDeliverPinCodeDomesticSuggestion = async (item) => {
     setDeliverCodeDomestic(item.city);
     setSelectedSuggestDeliverPinCodeDomestic(item.postal_code);
@@ -124,6 +161,16 @@ const Trackaship1 = ({
     setSelectedSuggestPickupCountryCodeDomestic(item.country_code);
   };
 
+  const handleSuggestPickupPinCodeInternationalSuggestion = (item) => {
+    setPickupPinCodeInternational(item.city);
+    setSelectedSuggestPickupPinCodeInternational(item.postal_code);
+    setSelectedSuggestPickupStateInternational(item.state);
+    setSelectedSuggestPickupCityInternational(item.city);
+    setSelectedSuggestPickupLatitudeInternational(item.latitude);
+    setSelectedSuggestPickupLongitudeInternational(item.longitude);
+    setSelectedSuggestPickupCountryCodeInternational(item.country_code);
+  };
+
   useEffect(() => {
     if (
       selectedSuggestPickupPinCodeDomestic !== null &&
@@ -140,6 +187,24 @@ const Trackaship1 = ({
     selectedSuggestPickupCityDomestic,
     selectedSuggestPickupLatitudeDomestic,
     selectedSuggestPickupLongitudeDomestic,
+  ]);
+
+  useEffect(() => {
+    if (
+      selectedSuggestPickupPinCodeInternational !== null &&
+      selectedSuggestPickupStateInternational !== null &&
+      selectedSuggestPickupCityInternational !== null &&
+      selectedSuggestPickupLatitudeInternational !== null &&
+      selectedSuggestPickupLongitudeInternational !== null
+    ) {
+      setWriteablePickupInternational(false);
+    }
+  }, [
+    selectedSuggestPickupPinCodeInternational,
+    selectedSuggestPickupStateInternational,
+    selectedSuggestPickupCityInternational,
+    selectedSuggestPickupLatitudeInternational,
+    selectedSuggestPickupLongitudeInternational,
   ]);
 
   useEffect(() => {
@@ -249,9 +314,95 @@ const Trackaship1 = ({
   ///////////////////////////////////////////////////
   ///////////////////////////////////////////////////
 
+  useEffect(() => {
+    if (
+      selectedSuggestDeliverLatitudeInternational !== null &&
+      selectedSuggestDeliverLongitudeInternational !== null &&
+      selectedSuggestPickupLongitudeInternational !== null &&
+      selectedSuggestPickupLatitudeInternational !== null
+    ) {
+      console.log(
+        'selectedSuggestDeliverLatitudeInternational:',
+        selectedSuggestDeliverLatitudeInternational,
+        'selectedSuggestDeliverLongitudeInternational:',
+        selectedSuggestDeliverLongitudeInternational,
+        'selectedSuggestPickupLongitudeInternational:',
+        selectedSuggestPickupLongitudeInternational,
+        'selectedSuggestPickupLatitudeInternational:',
+        selectedSuggestPickupLatitudeInternational
+      );
+    }
+    
+  }, [
+    selectedSuggestDeliverLatitudeInternational,
+    selectedSuggestDeliverLongitudeInternational,
+    selectedSuggestPickupLongitudeInternational,
+    selectedSuggestPickupLatitudeInternational,
+  ]);
+  
+
+
+
   const handleButtonClickInternational = async (e) => {
     e.preventDefault();
-    alert("JII");
+    if (
+      country.length !== 0 &&
+      country.toLowerCase() != "select country" &&
+      !writeablePickupInternational
+    ) {
+      if (userEmail) {
+        try {
+          const response = await fetch("/api/verifyCountryUser", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              country: selectedSuggestPickupCountryCodeInternational,
+              email: userEmail,
+            }),
+          });
+          const responseData = await response.json();
+          if (responseData) {
+            if (responseData.success) {
+              toast.success("Congratulation! You are applicable...");
+           
+              const response2 = await fetch("/api/countryWithCapitalPinCode", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  pickupLongitude: selectedSuggestPickupLongitudeInternational,
+                  pickupLatitude: selectedSuggestPickupLatitudeInternational,
+                  deliverCountry: country,
+                }),
+              });
+              const response2Data = await response2.json();
+              if (response2Data.success) {
+                setSelectedSuggestDeliverLatitudeInternational(
+                  response2Data.data.latitude
+                );
+                setSelectedSuggestDeliverLongitudeInternational(
+                  response2Data.data.longitude
+                );
+              } else {
+                console.log("errorrrrrrrrrrr");
+              }
+              //do here
+            } else {
+              toast.error("Write your country's pin code in pickup...");
+            }
+          } else {
+            toast.error("Something went wront.. Reload the page..");
+          }
+        } catch (error) {
+          toast.error("Something went wrong! Reload the page");
+        }
+      }
+    } else {
+      toast.error("All fields are compulsory");
+    }
   };
 
   useEffect(() => {
@@ -269,32 +420,29 @@ const Trackaship1 = ({
           if (data.success) {
             if (data.result.length != 0) {
               //work here
-              console.log(data.result)
-              setSuggestPickupPinCodeInternational(data.result[pickupPinCodeInternational])
+              setSuggestPickupPinCodeInternational(
+                data.result[pickupPinCodeInternational]
+              );
             } else {
-              setSuggestPickupPinCodeInternational([])
-              toast.error("Not found..");
+              setSuggestPickupPinCodeInternational([]);
             }
           } else {
-            setSuggestPickupPinCodeInternational([])
-            toast.error("Not found..");
+            setSuggestPickupPinCodeInternational([]);
           }
         } catch (error) {
-          setSuggestPickupPinCodeInternational([])
-          console.error("Error:", error);
+          setSuggestPickupPinCodeInternational([]);
         }
       })();
-    }else{
-      setSuggestPickupPinCodeInternational([])
+    } else {
+      setSuggestPickupPinCodeInternational([]);
     }
   }, [pickupPinCodeInternational]);
 
   useEffect(() => {
     if (suggestPickupPinCodeInternational.length !== 0) {
       setSuggestPickupPinCodeInternationalArea(true);
-      console.log(suggestPickupPinCodeInternational);
-    }else{
-      setSuggestPickupPinCodeInternationalArea()
+    } else {
+      setSuggestPickupPinCodeInternationalArea();
     }
   }, [suggestPickupPinCodeInternational]);
 
@@ -666,75 +814,121 @@ const Trackaship1 = ({
                     </div>
                   ) : (
                     <div className="mt-[19px] flex flex-col content-center items-center mr-4">
-  <div className="w-[30vw] h-[5vh] relative"> {/* Added relative positioning */}
-    <input
-      type="tel"
-      name="pickupPinCodeInternational"
-      value={pickupPinCodeInternational}
-      onChange={(e) =>
-        setPickupPinCodeInternational(e.target.value)
-      }
-      maxLength="10"
-      className="border border-black w-[100%] h-[100%] rounded-lg"
-      placeholder="Enter Pickup Pin Code"
-    />
-    {suggestPickupPinCodeInternationalArea && (
-      <div className={`rounded-2xl bg-white max-h-40 ${suggestPickupPinCodeInternational.length!==0 && "border border-black"} overflow-y-auto absolute top-full left-0 w-full z-10 custom-scrollbar`}>
-        {suggestPickupPinCodeInternational.map((item, index) => (
-          <div onClick={()=>{console.log(item)}} key={index}>
-            {item.city}
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-  <div className="bg-slate-100 vh] text-gray-500 text-sm"> 
-  </div>
-  <div className="w-[30vw] mt-3 h-[5vh] ">
-    <label
-      htmlFor="country"
-      className="mr-4"
-      style={{
-        userSelect: "none",
-        MozUserSelect: "none",
-        WebkitUserSelect: "none",
-        msUserSelect: "none",
-      }}
-    >
-      Select Country
-    </label>
-    <select
-      onChange={(e) => setCountry(e.target.value)}
-      value={country}
-      name="country"
-      className="border border-black w-[37%] h-[100%] rounded-lg"
-    >
-      {countryData.length > 0 &&
-        countryData.map((item, index) => (
-          <option key={index} value={item.name}>
-            {item.name}
-          </option>
-        ))}
-    </select>
-  </div>
-  <div>
-    <button
-      className="mt-3 border border-black rounded-full p-1"
-      onClick={(e) => {
-        handleButtonClickInternational(e);
-      }}
-      style={{
-        userSelect: "none",
-        MozUserSelect: "none",
-        WebkitUserSelect: "none",
-        msUserSelect: "none",
-      }}
-    >
-      Get Otp and Ship
-    </button>
-  </div>
-</div>
+                      {writeablePickupInternational ? (
+                        <div className="w-[30vw] h-[5vh] relative">
+                          {" "}
+                          {/* Added relative positioning */}
+                          <input
+                            type="tel"
+                            name="pickupPinCodeInternational"
+                            value={pickupPinCodeInternational}
+                            onChange={(e) =>
+                              setPickupPinCodeInternational(e.target.value)
+                            }
+                            maxLength="10"
+                            className="border border-black w-[100%] h-[100%] rounded-lg"
+                            placeholder="Enter Pickup Pin Code"
+                          />
+                          {suggestPickupPinCodeInternationalArea && (
+                            <div
+                              className={`rounded-2xl bg-white max-h-40 ${
+                                suggestPickupPinCodeInternational.length !==
+                                  0 && "border border-black"
+                              } overflow-y-auto absolute top-full left-0 w-full z-10 custom-scrollbar`}
+                            >
+                              {suggestPickupPinCodeInternational.map(
+                                (item, index) => (
+                                  <div
+                                    onClick={() => {
+                                      handleSuggestPickupPinCodeInternationalSuggestion(
+                                        item
+                                      );
+                                    }}
+                                    key={index}
+                                  >
+                                    {item.city}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div
+                          className="flex items-center border text-nowrap border-black w-[30vw] rounded-lg p-2 outline-none h-[5vh] overflow-hidden scrollable-container"
+                          style={{
+                            whiteSpace: "nowrap",
+                            overflowX: "auto",
+                            WebkitOverflowScrolling: "touch",
+                          }}
+                        >
+                          <style>
+                            {`
+         
+            .scrollable-container::-webkit-scrollbar {
+                height: 6px;
+                background-color: #f4f4f4; /* background color of the scrollbar track */
+            }
+            .scrollable-container::-webkit-scrollbar-thumb {
+                background-color: black;
+                border-radius: 3px;
+     }               
+        `}
+                          </style>
+                          {selectedSuggestPickupPinCodeInternational}{" "}
+                          {selectedSuggestPickupCityInternational}{" "}
+                          {selectedSuggestPickupStateInternational}
+                        </div>
+                      )}
 
+                      <div className="bg-slate-100 vh] text-gray-500 text-sm"></div>
+                      <div className="w-[30vw] mt-3 h-[5vh] ">
+                        <label
+                          htmlFor="country"
+                          className="mr-4"
+                          style={{
+                            userSelect: "none",
+                            MozUserSelect: "none",
+                            WebkitUserSelect: "none",
+                            msUserSelect: "none",
+                          }}
+                        >
+                          Select Country
+                        </label>
+                        <select
+                          onChange={(e) => setCountry(e.target.value)}
+                          value={country}
+                          name="country"
+                          className="border border-black w-[37%] h-[100%] rounded-lg"
+                        >
+                          <option className="bg-gray-100">
+                            Select Country
+                          </option>
+                          {countryData.length > 0 &&
+                            countryData.map((item, index) => (
+                              <option key={index} value={item.name}>
+                                {item.name}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                      <div>
+                        <button
+                          className="mt-3 border border-black rounded-full p-1"
+                          onClick={(e) => {
+                            handleButtonClickInternational(e);
+                          }}
+                          style={{
+                            userSelect: "none",
+                            MozUserSelect: "none",
+                            WebkitUserSelect: "none",
+                            msUserSelect: "none",
+                          }}
+                        >
+                          Get Otp and Ship
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
               )}

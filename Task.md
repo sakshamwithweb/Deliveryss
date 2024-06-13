@@ -1,1 +1,0 @@
-###Start working to keep the datils of pincode in div..

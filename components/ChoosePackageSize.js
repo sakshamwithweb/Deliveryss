@@ -5,11 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 const ChoosePackageSize = ({ handleNextCard }) => {
   const [selectedLabel, setSelectedLabel] = useState("");
 
-  useEffect(() => {
-    if (selectedLabel.length !== 0) {
-      console.log(selectedLabel);
-    }
-  }, [selectedLabel]);
+
 
   const items = [
     {

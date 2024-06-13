@@ -39,12 +39,7 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
         setSelectedComponent(3);
       } else {
         toast.error("Something went wrong. Reload...");
-        console.log({
-          describePackageContent,
-          describeYourPackage,
-          packageSize,
-          deliveryPrice,
-        });
+        
       }
     }
   };
