@@ -2,15 +2,16 @@ import mongoose from "mongoose";
 
 const trackSchema = new mongoose.Schema({
   phoneNo: {
-    type: Number,
+    type: String,
     required: true,
   },
   deliveryPartnerPhoneNumber: {
     type: String,
+    default: "None",
   },
   completePercent: {
     type: Number,
-    required: true,
+    default: 25,
   },
   product_name: {
     type: String,
@@ -18,6 +19,19 @@ const trackSchema = new mongoose.Schema({
   },
   sender: {
     type: String,
+    required: true,
+  },
+  receiver: {
+    type: String,
+    required: true,
+  },
+  receiver_number: {
+    type: String,
+    required: true,
+  },
+  receiver_email: {
+    type: String,
+    required: true,
   },
   email: {
     type: String,
@@ -30,23 +44,36 @@ const trackSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    required: true,
-  },                                                      
+    default: "Order Placed",
+  },
   delivered_date: {
-    type: Date,
+    type: String,
     required: true,
   },
   sent_from: {
-    type: String,
+    type: Object,
     required: true,
   },
   received_address: {
-    type: String,
+    type: Object,
     required: true,
   },
   sent_date: {
+    type: Date,
+    default: Date.now, // Updated to use Date.now for default value
+  },
+  package_content_Size_Package: {
+    type: Array,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  verification_type: {
     type: String,
-    default: new Date(),
+  },
+  verification_number: {
+    type: String,
   },
 });
 

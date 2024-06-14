@@ -18,7 +18,7 @@ const Header = () => {
               className="logo mx-7 h-[80%] text-center text-xl font-bold flex items-center text-gray-800 bg-yellow-500 rounded-full p-3 cursor-pointer"
               style={{ userSelect: "none" }}
             >
-              {process.env.NAME}
+              Delivery
             </div>
             <ul
               className={`flex mx-7 ${
@@ -63,7 +63,7 @@ const Header = () => {
                 msUserSelect: "none",
               }}
             >
-              {process.env.NAME}
+              Delivery
             </div>
           </>
         )}

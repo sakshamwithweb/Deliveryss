@@ -5,6 +5,7 @@ import ChoosePackageSize from "./ChoosePackageSize";
 import DelhiveryProtectAPrice from "./DeliveryProtect";
 import DescribePackageContent from "./DescribePackageContent";
 import DescribeYourPackage from "./DescribeYourPackage";
+import ChoosePackageName from "./choosePackageName";
 
 const CardList = ({ setSelectedComponent, setRound2Data }) => {
   const [activeCardIndex, setActiveCardIndex] = useState(0);
@@ -13,6 +14,8 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
   const [packageSize, setPackageSize] = useState("");
   const [deliveryPrice, setdeliveryPrice] = useState("")
   const [insurancePrice, setInsurancePrice] = useState("")
+  const [packageName, setPackageName] = useState("")
+
 
   const handleNextCard = (selectedLabel) => {
     if (activeCardIndex === 0) {
@@ -25,17 +28,22 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
       setPackageSize(selectedLabel);
       setActiveCardIndex((prevIndex) => prevIndex + 1);
     } else if (activeCardIndex === 3) {
+      setPackageName(selectedLabel);
+      setActiveCardIndex((prevIndex) => prevIndex + 1);
+    } else if (activeCardIndex === 4) {
       if (
         describePackageContent.length !== 0 &&
         describeYourPackage.length !== 0 &&
         packageSize.length !== 0 &&
         deliveryPrice.length !== 0 &&
-        insurancePrice.length !== 0
+        insurancePrice.length !== 0 &&
+        packageName.length !== 0
       ) {
         setRound2Data({
           describePackageContent,
           describeYourPackage,
           packageSize,
+          packageName,
           deliveryPrice: parseInt(deliveryPrice),
           insurancePrice:parseInt(insurancePrice)
         });
@@ -59,6 +67,9 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
         <ChoosePackageSize handleNextCard={handleNextCard} />
       )}
       {activeCardIndex === 3 && (
+        <ChoosePackageName handleNextCard={handleNextCard} />
+      )}
+      {activeCardIndex === 4 && (
         <DelhiveryProtectAPrice
           setdeliveryPrice={setdeliveryPrice}
           handleNextCard={handleNextCard}

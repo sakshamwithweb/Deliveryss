@@ -19,6 +19,7 @@ const DomesticForm = ({
   const [round2Data, setRound2Data] = useState({});
   const [round3Data, setRound3Data] = useState({});
   const [round4Data,setRound4Data]=useState({})
+  const [round5Data,setRound5Data]=useState({})
 
   useEffect(() => {
     if (Object.keys(round1Data).length > 0) {
@@ -102,7 +103,7 @@ const DomesticForm = ({
         case 5:
           return (
             <>
-              <DomesticFormRound5 round1Data={round1Data} round2Data={round2Data} round3Data={round3Data} round4Data={round4Data}/>
+              <DomesticFormRound5 setRound5Data={setRound5Data} round1Data={round1Data} round2Data={round2Data} round3Data={round3Data} round4Data={round4Data}/>
             </>
           );
       default:

@@ -12,7 +12,7 @@ const Banner = () => {
           msUserSelect: "none",
         }}
       >
-        {process.env.NAME}
+        Delivery
       </h1>
       <p
         className="text-3xl font-[600] mb-7"
