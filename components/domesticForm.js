@@ -102,7 +102,7 @@ const DomesticForm = ({
         case 5:
           return (
             <>
-              <DomesticFormRound5/>
+              <DomesticFormRound5 round1Data={round1Data} round2Data={round2Data} round3Data={round3Data} round4Data={round4Data}/>
             </>
           );
       default:

@@ -11,7 +11,8 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
   const [describePackageContent, setDescribePackageContent] = useState("");
   const [describeYourPackage, setDescribeYourPackage] = useState("");
   const [packageSize, setPackageSize] = useState("");
-  const [deliveryPrice, setdeliveryPrice] = useState("");
+  const [deliveryPrice, setdeliveryPrice] = useState("")
+  const [insurancePrice, setInsurancePrice] = useState("")
 
   const handleNextCard = (selectedLabel) => {
     if (activeCardIndex === 0) {
@@ -28,13 +29,15 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
         describePackageContent.length !== 0 &&
         describeYourPackage.length !== 0 &&
         packageSize.length !== 0 &&
-        deliveryPrice.length !== 0
+        deliveryPrice.length !== 0 &&
+        insurancePrice.length !== 0
       ) {
         setRound2Data({
           describePackageContent,
           describeYourPackage,
           packageSize,
           deliveryPrice: parseInt(deliveryPrice),
+          insurancePrice:parseInt(insurancePrice)
         });
         setSelectedComponent(3);
       } else {
@@ -60,6 +63,7 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
           setdeliveryPrice={setdeliveryPrice}
           handleNextCard={handleNextCard}
           deliveryPrice={deliveryPrice}
+          setInsurancePrice={setInsurancePrice}
         />
       )}
     </div>

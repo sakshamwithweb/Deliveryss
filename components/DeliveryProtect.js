@@ -5,6 +5,7 @@ const DelhiveryProtectAPrice = ({
   handleNextCard,
   setdeliveryPrice,
   deliveryPrice,
+  setInsurancePrice
 }) => {
   const [packageValue, setPackageValue] = useState("");
   const [insuranceCost, setInsuranceCost] = useState(0);
@@ -39,7 +40,9 @@ const DelhiveryProtectAPrice = ({
 
   const handleProceed = () => {
     if (insuranceCost !== 0) {
-      setdeliveryPrice(packageValue); //if addapt insurance fee so do here.....
+      setdeliveryPrice(packageValue); 
+      setInsurancePrice(insuranceCost)
+      //if addapt insurance fee so do here.....
     }
   };
   useEffect(() => {
