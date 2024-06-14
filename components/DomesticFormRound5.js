@@ -46,7 +46,7 @@ const DomesticFormRound5 = ({
         amount: finalPrice * 100,
         currency: "USD",
         name: round1Data.pickupContactName,
-        description: "Transaction for Deliverysss",
+        description: `Transaction for ${process.env.NAME}`,
         order_id: orderId,
         handler: async function (response) {
           const data = {

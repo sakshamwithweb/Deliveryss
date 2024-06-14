@@ -4,7 +4,7 @@ const inter = Inter({ subsets: ['latin'] });
 import { ToastContainer,Bounce} from "react-toastify";
 
 export const metadata = {
-  title: 'deliverys',
+  title: {process.env.NAME},
   description: 'Not Best, But Unique',
 };
 

@@ -24,7 +24,7 @@ const WithLoginHeader = (props) => {
               className="logo mx-7 h-[80%] text-center text-xl font-bold flex items-center text-gray-800 bg-yellow-500 rounded-full p-3 cursor-pointer"
               style={{ userSelect: "none" }}
             >
-              Delivery
+              {process.env.NAME}
             </div>
             <ul
               className={`flex mx-7 ${
@@ -57,7 +57,7 @@ const WithLoginHeader = (props) => {
                 msUserSelect: "none",
               }}
             >
-              Delivery
+              {process.env.NAME}
             </div>
           </>
         )}
