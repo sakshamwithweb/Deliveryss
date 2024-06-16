@@ -7,17 +7,23 @@ const DomesticFormRound5 = ({
   round2Data,
   round3Data,
   round4Data,
+  profit,
 }) => {
-
   const [finalPrice, setFinalPrice] = useState(0); // Initialize finalPrice with 0
   const [uniqueOrderId, setUniqueOrderId] = useState(""); // Initialize uniqueOrderId with empty string
 
   useEffect(() => {
     // Calculate finalPrice whenever deliveryPrice or insurancePrice changes
-    if (round2Data.deliveryPrice != null && round2Data.insurancePrice != null) {
-      setFinalPrice(round2Data.deliveryPrice + round2Data.insurancePrice);
+    if (
+      profit != null &&
+      round2Data.deliveryPrice != null &&
+      round2Data.insurancePrice != null
+    ) {
+      setFinalPrice(
+        round2Data.deliveryPrice + round2Data.insurancePrice + profit
+      );
     }
-  }, [round2Data.deliveryPrice, round2Data.insurancePrice]);
+  }, [round2Data.deliveryPrice, round2Data.insurancePrice, profit]);
 
   const generateRandomString = (length, chars) => {
     let result = "";
@@ -117,11 +123,15 @@ const DomesticFormRound5 = ({
                 const url = `/cmplt?orderId=${uniqueOrderId}`;
                 const emailResponse = await fetch("/api/sendOtp", {
                   method: "POST",
-                  body: JSON.stringify({email:round1Data.pickupEmail,name:round1Data.pickupContactName,orderID:uniqueOrderId}),
+                  body: JSON.stringify({
+                    email: round1Data.pickupEmail,
+                    name: round1Data.pickupContactName,
+                    orderID: uniqueOrderId,
+                  }),
                   headers: { "Content-Type": "application/json" },
                 });
                 window.history.pushState(null, "", url);
-                window.location.reload()
+                window.location.reload();
               } else {
                 toast.error("Failed to save product details.");
               }
@@ -159,25 +169,35 @@ const DomesticFormRound5 = ({
     }
   };
 
-
   return (
     <div className="flex flex-col justify-center items-center min-h-[70vh] bg-gray-50">
       <Script
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
       />
-      <div className="flex flex-col justify-center items-center h-80 w-96 bg-white rounded-lg shadow-md p-6">
+      <div className="flex flex-col justify-center items-center h-[60vh] w-96 bg-white rounded-lg shadow-md p-6">
         <div className="w-full">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Bill Details
           </h2>
+          <div className="text-lg font-bold my-2">
+            Product's value: ${round2Data.deliveryPrice}
+          </div>
+          <div className="text-lg font-bold my-2">
+            Insurance charge: ${round2Data.insurancePrice}
+          </div>
+          <div className="text-lg font-bold my-2">
+            Company charge: ${profit}
+          </div>
           <span className="text-lg mb-2">
             <strong>Amount:</strong> ${round2Data.deliveryPrice} + $
-            {round2Data.insurancePrice} =
+            {round2Data.insurancePrice} + ${profit} =
           </span>
           <span className="bg-blue-200 p-1 text-lg">${finalPrice}</span>
           <p className="text-lg mb-4">
-            <strong>Name:</strong> {round1Data.pickupContactName}
+            <div className="text-lg font-bold my-2 overflow-hidden overflow-ellipsis">
+              Name: {round1Data.pickupContactName}
+            </div>
           </p>
           <button
             className="w-full p-3 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"

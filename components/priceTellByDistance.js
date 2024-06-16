@@ -1,33 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DomesticForm from "./domesticForm";
 
-const R = 6371;
-
-const weightRanges = [
-  { min: 1, max: 50, factor: 1.0 },
-  { min: 50, max: 200, factor: 2.0 },
-  { min: 200, max: 500, factor: 3.0 },
-  { min: 500, max: 1000, factor: 4.0 },
-  { min: 1000, max: 5000, factor: 5.0 },
-  { min: 5000, max: 25000, factor: 6.0 },
-  { min: 25000, max: 50000, factor: 7.0 },
-];
-
-const deg2rad = (deg) => deg * (Math.PI / 180);
-
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const dLat = deg2rad(lat2 - lat1);
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return (R * c).toFixed(2);
-};
-
 const PriceTellByDistance = ({
   pickupLatitude,
   pickupLongitude,
@@ -43,6 +16,34 @@ const PriceTellByDistance = ({
   const [domesticForm, setDomesticForm] = useState(false);
   const [distance, setDistance] = useState(null);
   const [priceList, setPriceList] = useState([]);
+
+  const R = 6371;
+
+  const weightRanges = [
+    { min: 1, max: 50, factor: 1.0, id: 1 },
+    { min: 50, max: 200, factor: 2.0, id: 2 },
+    { min: 200, max: 500, factor: 3.0, id: 3 },
+    { min: 500, max: 1000, factor: 4.0, id: 4 },
+    { min: 1000, max: 2000, factor: 5.0, id: 5 },
+    { min: 2000, max: 5000, factor: 6.0, id: 6 },
+    { min: 5000, max: 25000, factor: 7.0, id: 7 },
+    { min: 25000, max: 50000, factor: 8.0, id: 8 },
+  ];
+
+  const deg2rad = (deg) => deg * (Math.PI / 180);
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return (R * c).toFixed(2);
+  };
 
   useEffect(() => {
     if (
@@ -95,7 +96,8 @@ const PriceTellByDistance = ({
         {domesticForm ? (
           <>
             <DomesticForm
-            distance={distance}
+              distance={distance}
+              weightRanges={weightRanges}
               selectedSuggestPickupPinCodeDomestic={
                 selectedSuggestPickupPinCodeDomestic
               }

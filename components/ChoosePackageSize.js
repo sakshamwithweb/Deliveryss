@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ChoosePackageSize = ({ handleNextCard }) => {
+const ChoosePackageSize = ({ handleNextCard,setProfit, distance, weightRanges }) => {
   const [selectedLabel, setSelectedLabel] = useState("");
+  const [itemId, setItemId] = useState();
 
+  useEffect(() => {
+    if (distance != null && itemId != null) {
+      const confirmRange = weightRanges.find((range) => range.id === itemId);
+      console.log("confirmRange", confirmRange);
 
+      if (confirmRange) {
+        const basePrice = distance / 400;
+        const calculatedPrice = basePrice * confirmRange.factor;
+        const roundedPrice = Math.round(calculatedPrice * 100) / 100;
+        setProfit(roundedPrice)
+      }
+    }
+  }, [distance, itemId]);
 
   const items = [
     {
@@ -52,6 +65,7 @@ const ChoosePackageSize = ({ handleNextCard }) => {
 
   const handleItemClick = (item) => {
     setSelectedLabel(selectedLabel === item.label ? "" : item.label);
+    setItemId(item.id);
   };
 
   const handleSubmit = () => {

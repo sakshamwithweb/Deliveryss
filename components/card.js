@@ -7,7 +7,7 @@ import DescribePackageContent from "./DescribePackageContent";
 import DescribeYourPackage from "./DescribeYourPackage";
 import ChoosePackageName from "./choosePackageName";
 
-const CardList = ({ setSelectedComponent, setRound2Data }) => {
+const CardList = ({ setSelectedComponent,distance,setProfit, setRound2Data,weightRanges }) => {
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [describePackageContent, setDescribePackageContent] = useState("");
   const [describeYourPackage, setDescribeYourPackage] = useState("");
@@ -64,7 +64,7 @@ const CardList = ({ setSelectedComponent, setRound2Data }) => {
         <DescribeYourPackage handleNextCard={handleNextCard} />
       )}
       {activeCardIndex === 2 && (
-        <ChoosePackageSize handleNextCard={handleNextCard} />
+        <ChoosePackageSize setProfit={setProfit} handleNextCard={handleNextCard} weightRanges={weightRanges} distance={distance} />
       )}
       {activeCardIndex === 3 && (
         <ChoosePackageName handleNextCard={handleNextCard} />
