@@ -401,7 +401,7 @@ const Trackaship1 = ({
 
   //check to add suggestions in international ship pickup input
   useEffect(() => {
-    // when user has written 5 digit or more pin code in input 
+    // when user has written 5 digit or more pin code in input
     if (pickupPinCodeInternational.length >= 5) {
       // Use IIFE concept to direct call function
       //This function will fetch the array of same pin code
@@ -427,17 +427,14 @@ const Trackaship1 = ({
               );
               // else if 0 data pincode is as user input
             } else {
-              toast.error("No place found..")
               setSuggestPickupPinCodeInternational([]);
             }
             // when error is there any
           } else {
-            toast.error("Something is wrong!")
             setSuggestPickupPinCodeInternational([]);
           }
           // if error comes during following try.
         } catch (error) {
-          toast.error("Something is wrong!")
           setSuggestPickupPinCodeInternational([]);
         }
       })();
@@ -611,9 +608,9 @@ const Trackaship1 = ({
                           name="orderId"
                           value={orderId}
                           onChange={(e) => setOrderId(e.target.value)}
-                          maxLength="9"
+                          maxLength="10"
                           className="border border-black w-[100%] h-[100%] rounded-lg"
-                          placeholder="Enter 9 Character's Order Id"
+                          placeholder="Enter 10 Character's Order Id"
                         />
                       </div>
                       <div>

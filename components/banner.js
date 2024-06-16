@@ -15,7 +15,7 @@ const Banner = () => {
         Delivery
       </h1>
       <p
-        className="text-3xl font-[600] mb-7"
+        className="text-3xl text-white font-[600] mb-7"
         style={{
           userSelect: "none",
           MozUserSelect: "none",

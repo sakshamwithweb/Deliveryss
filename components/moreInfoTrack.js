@@ -22,7 +22,6 @@ const MoreInfoTrack = ({
     sender,
     email,
     order_Id,
-    status,
     delivered_date,
     sent_from,
     received_address,
@@ -83,12 +82,12 @@ const MoreInfoTrack = ({
           </div>
           <div className="mb-4">
             <h2 className="text-xl font-semibold">Shipping Information</h2>
-            <p>Sent From: {sent_from}</p>
-            <p>Received Address: {received_address}</p>
+            <p>Sent From: {sent_from.city}{" "}{sent_from.state}</p>
+            <p>Received Address: {received_address.city}{' '}{received_address.state}</p>
             <p>Sent Date: {new Date(sent_date).toLocaleDateString()}</p>
             <p>
               Estimated Delivery Date:{" "}
-              {new Date(delivered_date).toLocaleDateString()}
+              {delivered_date}
             </p>
           </div>
         </div>

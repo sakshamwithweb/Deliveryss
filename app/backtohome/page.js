@@ -503,7 +503,7 @@ export default function Login() {
                     <span
                       className="cursor-pointer text-blue-500"
                       onClick={() => {
-                        router.push("/term_condition");
+                        router.push("/termcondition");
                       }}
                     >
                       {" "}

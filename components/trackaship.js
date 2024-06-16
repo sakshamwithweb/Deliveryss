@@ -17,7 +17,7 @@ const TrackAShip = (props) => {
   
   const [error, setError] = useState(false);
   const isMobileValid = mobileNo.length === 10;
-  const isOrderIdValid = orderId.length === 9;
+  const isOrderIdValid = orderId.length === 10;
 
   const [moreInfoByOrderId, setMoreInfoByOrderId] = useState(false);
   const [moreInfoByOrderIdData, setMoreInfoByOrderIdData] = useState({});

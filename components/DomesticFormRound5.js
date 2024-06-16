@@ -8,6 +8,7 @@ const DomesticFormRound5 = ({
   round3Data,
   round4Data,
 }) => {
+
   const [finalPrice, setFinalPrice] = useState(0); // Initialize finalPrice with 0
   const [uniqueOrderId, setUniqueOrderId] = useState(""); // Initialize uniqueOrderId with empty string
 
@@ -93,7 +94,7 @@ const DomesticFormRound5 = ({
               headers: { "Content-Type": "application/json" },
             });
             const res = await result.json();
-            
+
             if (res.isOk) {
               // Payment is verified, proceed to save to database
               const saveResponse = await fetch("/api/shipVerifiedSendDB", {
@@ -109,10 +110,18 @@ const DomesticFormRound5 = ({
                   uniqueOrderId,
                 }),
               });
-              
+
               const saveData = await saveResponse.json();
               if (saveData.success) {
                 toast.success("Product details submitted.");
+                const url = `/cmplt?orderId=${uniqueOrderId}`;
+                const emailResponse = await fetch("/api/sendOtp", {
+                  method: "POST",
+                  body: JSON.stringify({email:round1Data.pickupEmail,name:round1Data.pickupContactName,orderID:uniqueOrderId}),
+                  headers: { "Content-Type": "application/json" },
+                });
+                window.history.pushState(null, "", url);
+                window.location.reload()
               } else {
                 toast.error("Failed to save product details.");
               }
@@ -149,6 +158,7 @@ const DomesticFormRound5 = ({
       toast.error("Payment processing failed.");
     }
   };
+
 
   return (
     <div className="flex flex-col justify-center items-center min-h-[70vh] bg-gray-50">
