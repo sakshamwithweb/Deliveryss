@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import DomesticForm from "./domesticForm";
 
 const PriceTellByDistance = ({
+  country,
   pickupLatitude,
   pickupLongitude,
   deliverLatitude,
   deliverLongitude,
   selectedSuggestDeliverPinCodeDomestic,
-  selectedSuggestPickupPinCodeDomestic,
-  selectedSuggestPickupStateDomestic,
-  selectedSuggestPickupCityDomestic,
+  selectedSuggestPickupPinCode,
+  selectedSuggestPickupState,
+  selectedSuggestPickupCity,
   selectedSuggestDeliverCityDomestic,
   selectedSuggestDeliverStateDomestic,
+  mobile,
 }) => {
   const [domesticForm, setDomesticForm] = useState(false);
   const [distance, setDistance] = useState(null);
@@ -19,16 +21,27 @@ const PriceTellByDistance = ({
 
   const R = 6371;
 
-  const weightRanges = [
-    { min: 1, max: 50, factor: 1.0, id: 1 },
-    { min: 50, max: 200, factor: 2.0, id: 2 },
-    { min: 200, max: 500, factor: 3.0, id: 3 },
-    { min: 500, max: 1000, factor: 4.0, id: 4 },
-    { min: 1000, max: 2000, factor: 5.0, id: 5 },
-    { min: 2000, max: 5000, factor: 6.0, id: 6 },
-    { min: 5000, max: 25000, factor: 7.0, id: 7 },
-    { min: 25000, max: 50000, factor: 8.0, id: 8 },
-  ];
+  const weightRanges = mobile
+    ? [
+        { min: 1, max: 50, factor: 1.0, id: 1 },
+        { min: 50, max: 200, factor: 2.0, id: 2 },
+        { min: 200, max: 500, factor: 3.0, id: 3 },
+        { min: 500, max: 1000, factor: 4.0, id: 4 },
+        { min: 1000, max: 2000, factor: 5.0, id: 5 },
+        { min: 2000, max: 5000, factor: 6.0, id: 6 },
+        { min: 5000, max: 25000, factor: 7.0, id: 7 },
+        { min: 25000, max: 50000, factor: 8.0, id: 8 },
+      ]
+    : [
+        { min: 1, max: 50, factor: 1.2, id: 1 },
+        { min: 50, max: 200, factor: 2.4, id: 2 },
+        { min: 200, max: 500, factor: 3.6, id: 3 },
+        { min: 500, max: 1000, factor: 4.8, id: 4 },
+        { min: 1000, max: 2000, factor: 6.0, id: 5 },
+        { min: 2000, max: 5000, factor: 7.2, id: 6 },
+        { min: 5000, max: 25000, factor: 8.4, id: 7 },
+        { min: 25000, max: 50000, factor: 9.6, id: 8 },
+      ];
 
   const deg2rad = (deg) => deg * (Math.PI / 180);
 
@@ -96,10 +109,12 @@ const PriceTellByDistance = ({
         {domesticForm ? (
           <>
             <DomesticForm
+            country={country}
+              mobile={mobile}
               distance={distance}
               weightRanges={weightRanges}
               selectedSuggestPickupPinCodeDomestic={
-                selectedSuggestPickupPinCodeDomestic
+                selectedSuggestPickupPinCode
               }
               selectedSuggestDeliverPinCodeDomestic={
                 selectedSuggestDeliverPinCodeDomestic
@@ -110,12 +125,8 @@ const PriceTellByDistance = ({
               selectedSuggestDeliverStateDomestic={
                 selectedSuggestDeliverStateDomestic
               }
-              selectedSuggestPickupCityDomestic={
-                selectedSuggestPickupCityDomestic
-              }
-              selectedSuggestPickupStateDomestic={
-                selectedSuggestPickupStateDomestic
-              }
+              selectedSuggestPickupCityDomestic={selectedSuggestPickupCity}
+              selectedSuggestPickupStateDomestic={selectedSuggestPickupState}
             />
           </>
         ) : (
@@ -154,7 +165,7 @@ const PriceTellByDistance = ({
             ) : null}
             <button
               onClick={() => {
-                if (selectedSuggestPickupPinCodeDomestic != null) {
+                if (selectedSuggestPickupPinCode != null) {
                   setDomesticForm(true);
                 }
               }}

@@ -175,7 +175,6 @@ export async function POST(request) {
         return NextResponse.json({ success: false, data: {} }); // or handle no result case
       }
     } else {
-      console.error(`Failed to fetch with status ${response.status}`);
       return NextResponse.json({ success: false, error: "Failed to fetch" });
     }
   } catch (error) {

@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import ProgressTracker from "./progressTracker";
 import SubDomesticDeliverFormRound1 from "./subDomesticDeliverFormRound1";
 import SubDomesticPickupFormRound1 from "./subDomesticPickupFormRound1";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const DomesticFormRound1 = ({
+  country,
   selectedSuggestDeliverPinCodeDomestic,
   selectedSuggestPickupPinCodeDomestic,
   selectedSuggestDeliverStateDomestic,
@@ -14,7 +15,26 @@ const DomesticFormRound1 = ({
   selectedSuggestDeliverCityDomestic,
   setSelectedComponent,
   setRound1Data,
+  mobile,
 }) => {
+  useEffect(() => {
+    if (!mobile && country!=null) {
+      (async () => {
+        try {
+          const response = await fetch("/api/countrystate");
+          const myData = await response.json();
+          const countryList = myData.find((item) => item.name === country);
+          console.log(countryList.states);//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        } catch (error) {
+          alert("hiiiiiiiiiiii");
+          console.log(error)
+        }
+      })();
+    } else {
+      alert("why");
+      console.log(country)
+    }
+  }, [mobile,country]);
   const [pickupAddressWrite, setPickupAddressWrite] = useState(false);
   const [deliverAddressWrite, setDeliverAddressWrite] = useState(false);
   const [pickupContactName, setPickupContactName] = useState("");

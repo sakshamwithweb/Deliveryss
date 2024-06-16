@@ -314,7 +314,10 @@ const Trackaship1 = ({
       selectedSuggestDeliverLatitudeInternational !== null &&
       selectedSuggestDeliverLongitudeInternational !== null &&
       selectedSuggestPickupLongitudeInternational !== null &&
-      selectedSuggestPickupLatitudeInternational !== null
+      selectedSuggestPickupLatitudeInternational !== null &&
+      selectedSuggestPickupCityInternational !== null &&
+      selectedSuggestPickupStateInternational !== null &&
+      selectedSuggestPickupPinCodeInternational !== null
     ) {
       //when we know all so now show that user is appliable(Don't worry i have checked a condition in api to not get null value in longitude and latitude)
       toast.success("Congratulation! You are applicable...");
@@ -460,28 +463,52 @@ const Trackaship1 = ({
       {sendPriceTellBydistance ? (
         <>
           <PriceTellByDistance
+          mobile={mobile}
+          country={country}
             selectedSuggestDeliverCityDomestic={
               selectedSuggestDeliverCityDomestic
             }
             selectedSuggestDeliverStateDomestic={
               selectedSuggestDeliverStateDomestic
             }
-            selectedSuggestPickupCityDomestic={
-              selectedSuggestPickupCityDomestic
+            selectedSuggestPickupCity={
+              mobile
+                ? selectedSuggestPickupCityDomestic
+                : selectedSuggestPickupCityInternational
             }
-            selectedSuggestPickupStateDomestic={
-              selectedSuggestDeliverStateDomestic
+            selectedSuggestPickupState={
+              mobile
+                ? selectedSuggestDeliverStateDomestic
+                : selectedSuggestPickupStateInternational
             }
-            selectedSuggestPickupPinCodeDomestic={
-              selectedSuggestPickupPinCodeDomestic
+            selectedSuggestPickupPinCode={
+              mobile
+                ? selectedSuggestPickupPinCodeDomestic
+                : selectedSuggestPickupPinCodeInternational
             }
             selectedSuggestDeliverPinCodeDomestic={
               selectedSuggestDeliverPinCodeDomestic
             }
-            deliverLongitude={selectedSuggestDeliverLongitudeDomestic}
-            deliverLatitude={selectedSuggestDeliverLatitudeDomestic}
-            pickupLongitude={selectedSuggestPickupLongitudeDomestic}
-            pickupLatitude={selectedSuggestPickupLatitudeDomestic}
+            deliverLongitude={
+              mobile
+                ? selectedSuggestDeliverLongitudeDomestic
+                : selectedSuggestDeliverLongitudeInternational
+            }
+            deliverLatitude={
+              mobile
+                ? selectedSuggestDeliverLatitudeDomestic
+                : selectedSuggestDeliverLatitudeInternational
+            }
+            pickupLongitude={
+              mobile
+                ? selectedSuggestPickupLongitudeDomestic
+                : selectedSuggestPickupLongitudeInternational
+            }
+            pickupLatitude={
+              mobile
+                ? selectedSuggestPickupLatitudeDomestic
+                : selectedSuggestPickupLatitudeInternational
+            }
           />
         </>
       ) : (

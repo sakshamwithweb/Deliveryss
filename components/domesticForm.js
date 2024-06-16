@@ -12,15 +12,17 @@ const DomesticForm = ({
   selectedSuggestPickupStateDomestic,
   selectedSuggestPickupCityDomestic,
   selectedSuggestDeliverStateDomestic,
+  country={country},
   weightRanges,
   distance,
+  mobile
 }) => {
   const [selectedComponent, setSelectedComponent] = useState(1);
   const [round1Data, setRound1Data] = useState({});
   const [round2Data, setRound2Data] = useState({});
   const [round3Data, setRound3Data] = useState({});
-  const [round4Data,setRound4Data]=useState({})
-  const [profit,setProfit]=useState()
+  const [round4Data, setRound4Data] = useState({});
+  const [profit, setProfit] = useState();
 
   useEffect(() => {
     if (Object.keys(round1Data).length > 0) {
@@ -50,7 +52,8 @@ const DomesticForm = ({
     switch (selectedComponent) {
       case 1:
         return (
-          <DomesticFormRound1
+          <DomesticFormRound1 mobile={mobile}
+          country={country}
             setRound1Data={setRound1Data}
             setSelectedComponent={setSelectedComponent}
             selectedSuggestDeliverPinCodeDomestic={
@@ -104,12 +107,18 @@ const DomesticForm = ({
             />
           </>
         );
-        case 5:
-          return (
-            <>
-              <DomesticFormRound5 profit={profit} round1Data={round1Data} round2Data={round2Data} round3Data={round3Data} round4Data={round4Data}/>
-            </>
-          );
+      case 5:
+        return (
+          <>
+            <DomesticFormRound5
+              profit={profit}
+              round1Data={round1Data}
+              round2Data={round2Data}
+              round3Data={round3Data}
+              round4Data={round4Data}
+            />
+          </>
+        );
       default:
         return null;
     }
