@@ -26,6 +26,11 @@ export default function Home() {
   const [countryForDomesticShip, setCountryForDomesticShip] = useState("");
 
   useEffect(() => {
+    const videoGuidePrompt = `I'm currently developing an AI-driven video creation tool that converts spoken prompts into engaging animated videos. Here's how I envision the JSON format for integrating with the DELL-E API:\nImage Prompt: This should describe an image relevant to the spoken topic. It needs to be generated using deep prompt technology to ensure accuracy.\nDelay: Specify the duration in seconds for which each image should remain on screen, synchronized with the speech.\nGenerate as much as you think to do\nFor instance, if my speech revolves around climate change, the AI should be able to:\nGenerate an image prompt like 'A polar bear standing on a melting iceberg.'\nAssign a delay of 10 seconds to this image to match the corresponding speech segment.\nThe JSON format required would be structured as follows:\n[\n{\n"image_prompt": "A polar bear standing on a melting iceberg.",\n"delay": 10\n},\n{\n"image_prompt": "Next relevant image prompt description.",\n"delay": 8\n},\n{\n"image_prompt": "Another relevant image prompt description.",\n"delay": 12\n},\n...and so on...\n]\nJust give Json in response nothing else.\nmy speech-\nNAchjgfuhgerfbghj`;
+    console.log(videoGuidePrompt);
+  }, []);
+
+  useEffect(() => {
     const data = localStorage.getItem("email");
     if (data) {
       setEmail(data);
